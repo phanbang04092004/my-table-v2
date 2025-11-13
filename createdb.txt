@@ -1,0 +1,114 @@
+CREATE TABLE `areas` (
+  `area_id` int NOT NULL AUTO_INCREMENT,
+  `area_code` varchar(20) NOT NULL,
+  `area_name` varchar(100) NOT NULL,
+  `region_id` int NOT NULL,
+  PRIMARY KEY (`area_id`),
+  UNIQUE KEY `area_code` (`area_code`),
+  KEY `region_id` (`region_id`),
+  CONSTRAINT `areas_ibfk_1` FOREIGN KEY (`region_id`) REFERENCES `regions` (`region_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `contents` (
+  `content_id` int NOT NULL AUTO_INCREMENT,
+  `content_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`content_id`),
+  UNIQUE KEY `content_name` (`content_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `dayskpi` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `date` varchar(50) NOT NULL,
+  `days_kpi` int DEFAULT NULL,
+  `monthly_accumulated` int DEFAULT '0',
+  `detailskpi_id` int NOT NULL,
+  `route_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `detailskpi_id` (`detailskpi_id`),
+  KEY `route_id` (`route_id`),
+  CONSTRAINT `dayskpi_ibfk_1` FOREIGN KEY (`detailskpi_id`) REFERENCES `detailskpi` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `dayskpi_ibfk_2` FOREIGN KEY (`route_id`) REFERENCES `sales_routes` (`route_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=27721 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `detailskpi` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `kpi_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `kpi_id` (`kpi_id`),
+  CONSTRAINT `detailskpi_ibfk_1` FOREIGN KEY (`kpi_id`) REFERENCES `kpis` (`kpi_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `distributors` (
+  `distributor_id` int NOT NULL AUTO_INCREMENT,
+  `distributor_code` varchar(50) NOT NULL,
+  `distributor_name` varchar(100) NOT NULL,
+  `area_id` int NOT NULL,
+  PRIMARY KEY (`distributor_id`),
+  UNIQUE KEY `distributor_code` (`distributor_code`),
+  KEY `area_id` (`area_id`),
+  CONSTRAINT `distributors_ibfk_1` FOREIGN KEY (`area_id`) REFERENCES `areas` (`area_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `kpis` (
+  `kpi_id` int NOT NULL AUTO_INCREMENT,
+  `kpi_name` varchar(100) NOT NULL,
+  `content_id` int NOT NULL,
+  PRIMARY KEY (`kpi_id`),
+  UNIQUE KEY `kpi_name` (`kpi_name`),
+  KEY `content_id` (`content_id`),
+  CONSTRAINT `kpis_ibfk_1` FOREIGN KEY (`content_id`) REFERENCES `contents` (`content_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `regions` (
+  `region_id` int NOT NULL AUTO_INCREMENT,
+  `region_code` varchar(20) NOT NULL,
+  `region_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`region_id`),
+  UNIQUE KEY `region_code` (`region_code`),
+  UNIQUE KEY `region_code_2` (`region_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `sales_routes` (
+  `route_id` int NOT NULL AUTO_INCREMENT,
+  `route_code` varchar(50) NOT NULL,
+  `route_name` varchar(100) NOT NULL,
+  `distributor_id` int NOT NULL,
+  PRIMARY KEY (`route_id`),
+  UNIQUE KEY `route_code` (`route_code`),
+  KEY `distributor_id` (`distributor_id`),
+  CONSTRAINT `sales_routes_ibfk_1` FOREIGN KEY (`distributor_id`) REFERENCES `distributors` (`distributor_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE DATABASE `fillter` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+	
