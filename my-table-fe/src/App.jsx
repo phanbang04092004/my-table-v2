@@ -39,7 +39,7 @@ export function App() {
 
         <Grid container spacing={0} alignItems="flex-start" >
           <Grid size={6}>
-            <CustomizedTables />
+            <CustomizedTables routeId={filters.route} month={filters.thang} year={filters.nam}/>
           </Grid>
           <Grid size={6}>
             <StickyHeadTable routeId={filters.route} month={filters.thang} year={filters.nam} />

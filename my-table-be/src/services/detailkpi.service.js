@@ -10,6 +10,7 @@ const getAllDetailKpis = async () => {
         throw new Error('Could not retrieve detailkpi data.');
     }
 }
+
 module.exports = {
     getAllDetailKpis,
 };

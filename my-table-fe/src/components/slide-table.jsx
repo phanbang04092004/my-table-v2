@@ -29,8 +29,13 @@ export function StickyHeadTable({ routeId, month, year }) {
         const fetchData = async () => {
             try {
                 const monthYear = `${year}-${month.toString().padStart(2, '0')}`;
-                const url = `http://localhost:3000/api/datas/${routeId}/${monthYear}`;
-                const res = await axios.get(url);
+                const url = `http://localhost:3000/api/v1/datas`;
+                const res = await axios.get(url,{
+                    params: {
+                        routeId: routeId,
+                        month: monthYear
+                    }
+                });
                 console.log("Dữ liệu nhận được:", res.data);
                 setData(res.data);
             } catch (err) {

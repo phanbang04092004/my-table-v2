@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import axios from 'axios';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,21 +58,57 @@ const groupKpis = (rows) => {
   return result;
 };
 
-export function CustomizedTables() {
+export function CustomizedTables({ routeId, month, year }) {
   const [rows, setRows] = useState([]);
-
+// Lấy danh sách detailskpi để cố định cấu trúc bảng
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDetailKpis = async () => {
       try {
         const res = await fetch("http://localhost:3000/api/detailkpis");
         const json = await res.json();
         setRows(json);
       } catch (error) {
-        console.error("Lỗi khi tải dữ liệu:", error);
+        console.error("Lỗi khi tải dữ liệu detailkpis:", error);
       }
     };
-    fetchData();
+    fetchDetailKpis();
   }, []);
+
+  useEffect(() => {
+    if (!routeId || !month || !year) return;
+
+    const fetchAccumulated = async () => {
+      try {
+        const monthYear = `${month}-${year}`;
+
+        // Sử dụng query parameters
+        const res = await axios.get(`http://localhost:3000/api/v1/accumulated`, {
+          params: {
+            routeId: routeId,
+            month: monthYear
+          }
+        });
+
+        if (res.data.success && res.data.data) {
+          setRows(prevRows => {
+            return prevRows.map(row => {
+              const accumulatedData = res.data.data.find(
+                item => item.detailkpi_id === row.detailkpi_id
+              );
+              return {
+                ...row,
+                accumulatedValue: accumulatedData ? accumulatedData.accumulatedValue : null
+              };
+            });
+          });
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải dữ liệu accumulated:", error);
+      }
+    };
+
+    fetchAccumulated();
+  }, [routeId, month, year]);
 
   const sectionGroups = groupSections(rows);
   const kpiGroups = groupKpis(rows);
@@ -128,7 +165,9 @@ export function CustomizedTables() {
                   {row.detailItem}
                 </StyledTableCell>
                 <StyledTableCell align="center" sx={{ border: "1px solid #434242" }}>
-                  {row.acumulated}
+                  {row.accumulatedValue !== null && row.accumulatedValue !== undefined
+                    ? row.accumulatedValue
+                    : 0}
                 </StyledTableCell>
               </StyledTableRow>
             );
